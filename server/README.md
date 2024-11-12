@@ -28,8 +28,11 @@ make dev
 うまくいくと
 
 - Django (API) [http://localhost:8000/](http://localhost:8000/)
+- Swagger (APIドキュメント) [http://localhost:9000/](http://localhost:9000/)
 
 にアクセスできるようになります．
+
+- デバック用画面 [http://localhost:8000/api/diary/debug/](http://localhost:8000/api/diary/debug/)
 
 ### 3. コンテナの破壊
 
