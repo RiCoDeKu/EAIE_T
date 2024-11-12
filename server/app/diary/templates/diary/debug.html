@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Debug</title>
+    <style>
+        .result {
+            margin-top: 20px;
+        }
+        .result img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>APIDebug用画像アップローダー</h1>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <label for="image">画像ファイルを選択:</label>
+        <input type="file" id="image" name="image" accept="image/*" required>
+        <br><br>
+        <button type="submit">アップロード</button>
+    </form>
+
+    <div class="result" id="result" style="display: none;">
+        <h2>アップロード結果</h2>
+        <p>画像URL: <a id="imageUrl" href="" target="_blank"></a></p>
+        <img id="uploadedImage" src="" alt="アップロードされた画像">
+        <h3>生成された日記</h3>
+        <p id="diaryText"></p>
+    </div>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            var formData = new FormData();
+            var imageFile = document.getElementById('image').files[0];
+            formData.append('image', imageFile);
+
+            fetch('/api/diary/create/', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.image_url && data.text) {
+                    document.getElementById('imageUrl').href = data.image_url;
+                    document.getElementById('imageUrl').textContent = data.image_url;
+                    document.getElementById('uploadedImage').src = data.image_url;
+                    document.getElementById('diaryText').textContent = data.text;
+                    document.getElementById('result').style.display = 'block';
+                } else {
+                    alert('アップロードに失敗しました。');
+                }
+            })
+            .catch(error => {
+                console.error('エラー:', error);
+                alert('エラーが発生しました。');
+            });
+        });
+    </script>
+</body>
+</html>

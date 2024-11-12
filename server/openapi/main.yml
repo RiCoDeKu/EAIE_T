@@ -3,12 +3,12 @@ openapi: 3.1.0
 info:
   title: 毎日の絵日記
   summary: 画像から絵日記を生成
-  version: 1.0.0
+  version: 1.0.1
 
 paths:
-  /api/diaries/create/:
+  /api/diary/create/:
     post:
-      tags: [Diaries]
+      tags: [Diary]
       summary: 日記を作成する
       description: |
         画像から日記を生成する

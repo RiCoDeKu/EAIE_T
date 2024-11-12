@@ -14,3 +14,7 @@ dev:
 .PHONY: down
 down:
 	docker compose -f compose-dev.yml down
+
+.PHONY: bash
+bash:
+	docker compose -f compose-dev.yml exec django bash
