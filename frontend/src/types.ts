@@ -1,7 +1,7 @@
 /////////////// グローバルステート ////////////////
 // Dataオブジェクト
 export interface DataItem {
-  id: number;
+  id: string;
   title: string;
   date: string;
   img_server_pass: string;
@@ -21,10 +21,9 @@ export type Pages = Page[];
 
 // API への入力Format (ImageLoader)
 export interface UploadImageParams {
-  title: string; // タイトル
+  enable_ai: "true" | "false";
   imageFile: File | null; // アップロードする画像ファイル
-  date: string; // 日付
-  effect: string; // 選択されたエフェクト
+  image_filter: string; // 適用するイメージフィルター
 }
 
 // アップロードされたデータの型定義 (Edit や Uploaderで使用)

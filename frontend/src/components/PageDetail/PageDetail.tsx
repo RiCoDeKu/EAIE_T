@@ -21,15 +21,7 @@ const PageDetail = () => {
 
   return (
     <>
-      <DrawerContent
-        className="fixed top-8 flex flex-col items-center p-6  z-50"
-        style={{
-          backgroundImage: 'url("images/wood-texture_00008.jpg")',
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-        }}
-      >
+      <DrawerContent className="fixed top-8 flex flex-col items-center p-6  z-50">
         <DrawerHeader className="text-center">
           <DrawerTitle className="text-5xl font-bold">
             {data[indexData].title}

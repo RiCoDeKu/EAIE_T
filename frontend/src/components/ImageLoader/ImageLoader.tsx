@@ -2,12 +2,11 @@ import { useState } from "react";
 import { UploadImage } from "@/api/uploadImage";
 import { UploadImageParams, DataItem } from "@/types";
 import DrawerContainer from "@/components/layouts/DrawerContainer";
-import TitleInput from "@/components/ImageLoader/forms/TitleInput";
 import FileInput from "@/components/ImageLoader/forms/FileInput";
-import DateInput from "@/components/ImageLoader/forms/DateInput";
 import EffectSelector from "@/components/ImageLoader/forms/EffectSelector";
 import { useAtom } from "jotai";
 import { dataAtom } from "@/state/atom";
+import EnableAISelector from "./forms/EnableAISelector";
 
 interface Props {
   setLoading: (loading: boolean) => void; // ローディング状態
@@ -22,14 +21,16 @@ const ImageLoader: React.FC<Props> = ({
   setPageData,
   setActiveContent,
 }) => {
-  // フォームのデータを管理するための状態
+  // POSTする情報
   const [formData, setFormData] = useState<UploadImageParams>({
-    title: "",
+    enable_ai: "false",
     imageFile: null as File | null,
-    date: "",
-    effect: "none",
+    image_filter: "original",
   });
+  // formのエラーメッセージ
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+
+  // データを追加する
   const [, setData] = useAtom(dataAtom);
 
   // 入力変更ハンドラー
@@ -43,6 +44,7 @@ const ImageLoader: React.FC<Props> = ({
     }));
     validateField(name, value);
   };
+
   // フィールド単体のバリデーション
   const validateField = (
     name: keyof UploadImageParams,
@@ -50,11 +52,8 @@ const ImageLoader: React.FC<Props> = ({
   ) => {
     let error = "";
 
-    if (name === "title" || name === "date") {
-      if (typeof value === "string" && value.trim() === "") {
-        error = `${name === "title" ? "タイトル" : "日付"}を入力してください`;
-      }
-    } else if (name === "imageFile") {
+    // 画像ファイルが選択されていない場合
+    if (name === "imageFile") {
       if (!(value instanceof File)) {
         error = "画像ファイルを選択してください";
       }
@@ -68,15 +67,10 @@ const ImageLoader: React.FC<Props> = ({
   // フォーム全体のバリデーション
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
-    if (formData.title.trim() === "") {
-      newErrors.title = "タイトルを入力してください";
-    }
     if (!formData.imageFile) {
       newErrors.imageFile = "画像ファイルを選択してください";
     }
-    if (formData.date.trim() === "") {
-      newErrors.date = "日付を選択してください";
-    }
+
     setFormErrors(newErrors);
     return Object.keys(newErrors).length === 0; // エラーがなければtrue
   };
@@ -95,14 +89,13 @@ const ImageLoader: React.FC<Props> = ({
 
     try {
       // 画像をアップロードし、サーバーから結果を受け取る
-      const { title, date } = formData;
       const result = await UploadImage(formData);
       const pageData = {
         id: result.id, //サーバからのid
-        title,
+        title: result.title, //サーバーからの生成タイトル
         text: result.text, // サーバーからの生成テキスト
-        img_server_pass: result.image_url, // サーバーからの画像URL
-        date,
+        img_server_pass: result.img_server_pass, // サーバーからの画像URL
+        date: result.date,
       };
 
       setData((prevData) => [...prevData, pageData]); //データ配列に追加
@@ -120,30 +113,22 @@ const ImageLoader: React.FC<Props> = ({
 
   return (
     <DrawerContainer title="Add Diary">
-      {/* タイトル */}
-      <TitleInput
-        value={formData.title}
-        onChange={(value) => handleChange("title", value)}
-      />
-      {formErrors.title && <p className="text-red-500">{formErrors.title}</p>}
-
       {/* 画像 */}
       <FileInput onChange={(value) => handleChange("imageFile", value)} />
       {formErrors.imageFile && (
         <p className="text-red-500">{formErrors.imageFile}</p>
       )}
 
-      {/* 日付 */}
-      <DateInput
-        value={formData.date}
-        onChange={(value) => handleChange("date", value)}
+      {/* AI化するかいなか */}
+      <EnableAISelector
+        value={formData.enable_ai}
+        onChange={(value) => handleChange("enable_ai", value)}
       />
-      {formErrors.date && <p className="text-red-500">{formErrors.date}</p>}
 
       {/* エフェクト */}
       <EffectSelector
-        value={formData.effect}
-        onChange={(value) => handleChange("effect", value)}
+        value={formData.image_filter}
+        onChange={(value) => handleChange("image_filter", value)}
       />
 
       {/* 確認ボタン */}

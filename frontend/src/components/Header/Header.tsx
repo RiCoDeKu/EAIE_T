@@ -81,15 +81,7 @@ const Header = () => {
         {/* Edit用のDrawerTrigger */}
         <DrawerTrigger onClick={handleEditorBtn}>PageEditor</DrawerTrigger>
 
-        <DrawerContent
-          className="fixed top-8 flex flex-col items-center"
-          style={{
-            backgroundImage: 'url("images/wood-texture_00008.jpg")',
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-          }}
-        >
+        <DrawerContent className="fixed top-8 flex flex-col items-center">
           <DrawerClose />
 
           {/* ローディング状態 */}
