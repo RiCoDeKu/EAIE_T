@@ -1,14 +1,17 @@
-from django.db import models
-import uuid6
-import os
+from pathlib import Path
 
-def get_random_filename(instance, filename):
+import uuid6
+from django.db import models
+
+
+def get_random_filename(_instance, filename):
     # 元のファイルの拡張子を取得
-    ext = os.path.splitext(filename)[1]
+    ext = Path(filename).suffix
     # ランダムなUUIDを生成し、拡張子を付与
-    random_filename = f'{uuid6.uuid7().hex}{ext}'
+    random_filename = f"{uuid6.uuid7().hex}{ext}"
     # 保存先のパスを指定
-    return os.path.join('uploads/', random_filename)
+    return Path("uploads") / random_filename
+
 
 class DiaryEntry(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid6.uuid7, editable=False)
@@ -21,6 +24,3 @@ class DiaryEntry(models.Model):
 
     def __str__(self):
         return f"Diary Entry {self.id} - {self.created_at}"
-
-
-

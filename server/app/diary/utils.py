@@ -1,23 +1,23 @@
-from PIL import Image, ImageFilter, ImageOps, ImageEnhance
-from io import BytesIO
-from django.core.files.uploadedfile import InMemoryUploadedFile
 import sys
+from io import BytesIO
+
+from django.core.files.uploadedfile import InMemoryUploadedFile
+from PIL import Image, ImageEnhance, ImageFilter, ImageOps
+
 
 def apply_filter(image, image_filter):
     """
     Apply the specified filter to the input image and return it as an InMemoryUploadedFile.
-    
     Args:
         image: The uploaded image file.
         image_filter: A string specifying the filter to apply.
-        
     Returns:
         filtered_image_file: The processed image as an InMemoryUploadedFile.
     """
     pil_image = Image.open(image)
 
     # 元の画像形式を取得
-    original_format = pil_image.format if pil_image.format else 'JPEG'
+    original_format = pil_image.format if pil_image.format else "JPEG"
 
     # フィルタ処理
     if image_filter == "blur":
@@ -37,7 +37,8 @@ def apply_filter(image, image_filter):
         filtered_image = pil_image
 
     else:
-        raise ValueError("Invalid image filter")
+        error_messsage = f"Invalid image filter: {image_filter}"
+        raise ValueError(error_messsage)
 
     # メモリ上に画像を保存
     buffer = BytesIO()
@@ -45,13 +46,6 @@ def apply_filter(image, image_filter):
     buffer.seek(0)
 
     # InMemoryUploadedFile に変換
-    filtered_image_file = InMemoryUploadedFile(
-        buffer,
-        None,
-        f"filtered_{image.name}",
-        f"image/{original_format.lower()}",
-        sys.getsizeof(buffer),
-        None
+    return InMemoryUploadedFile(
+        buffer, None, f"filtered_{image.name}", f"image/{original_format.lower()}", sys.getsizeof(buffer), None
     )
-
-    return filtered_image_file
