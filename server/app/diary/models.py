@@ -24,3 +24,13 @@ class DiaryEntry(models.Model):
 
     def __str__(self):
         return f"Diary Entry {self.id} - {self.created_at}"
+
+
+class PageImage(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid6.uuid7, editable=False)
+    diary = models.ForeignKey(DiaryEntry, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to=get_random_filename)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Page Image {self.id} - {self.created_at}"
