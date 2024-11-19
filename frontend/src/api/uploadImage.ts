@@ -1,7 +1,7 @@
 import { DataItem, UploadImageParams } from "@/types";
 import axios from "axios";
 
-// 現在の API Response
+// Response
 interface UploadResponse {
   id: string;
   title: string;
@@ -10,7 +10,7 @@ interface UploadResponse {
   created_at: string;
 }
 
-//
+// 画像をアップロードし，サーバのレスポンスデータからDataオブジェクト作成
 export const UploadImage = async ({
   enable_ai,
   imageFile,

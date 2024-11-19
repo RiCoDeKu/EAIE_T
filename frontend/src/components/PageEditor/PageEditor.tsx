@@ -6,6 +6,7 @@ import TextareaField from "./forms/TextareaField";
 import DateField from "./forms/DateField";
 import { useAtom } from "jotai";
 import { dataAtom } from "@/state/atom";
+import EffectSelector from "../ImageLoader/forms/EffectSelector";
 
 interface PageEditorProps {
   pageData: DataItem;
@@ -20,6 +21,7 @@ const PageEditor: React.FC<PageEditorProps> = ({ pageData, onConfirm }) => {
   const [editedTitle, setEditedTitle] = useState(initialData?.title);
   const [editedText, setEditedText] = useState(initialData?.text);
   const [editedDate, setEditedDate] = useState(initialData?.date);
+  const [editedFilter, setEditedFilter] = useState("blur"); //フィルターはデフォルトで"blur"としとく
   const imageURL = initialData?.img_server_pass;
   const dataID = initialData?.id;
 
@@ -27,7 +29,7 @@ const PageEditor: React.FC<PageEditorProps> = ({ pageData, onConfirm }) => {
   const [, setData] = useAtom(dataAtom);
 
   // データの更新
-  const handleUpdate = (id: number) => {
+  const handleUpdate = (id: string) => {
     // 更新する新しいデータを作成
     const newItem = {
       id: id,
@@ -48,6 +50,7 @@ const PageEditor: React.FC<PageEditorProps> = ({ pageData, onConfirm }) => {
     console.log("Edited Title:", editedTitle);
     console.log("Edited Text:", editedText);
     console.log("Edited Date:", editedDate);
+    console.log("Edited filter", editedFilter);
     console.log("Image URL:", imageURL); // 画像URLは変更しない
     console.log("Data ID:", dataID);
 
@@ -79,14 +82,19 @@ const PageEditor: React.FC<PageEditorProps> = ({ pageData, onConfirm }) => {
         <p className="mt-4">No image available</p>
       )}
 
-      {/* 各入力フォーム */}
+      {/* テキスト入力フォーム */}
       <TextareaField
         label="Text"
         value={editedText}
         onChange={setEditedText}
         placeholder="Enter text"
       />
+
+      {/* 日付入力フォーム */}
       <DateField label="Date" value={editedDate} onChange={setEditedDate} />
+
+      {/* イメージフィルター入力フォーム */}
+      <EffectSelector value={editedFilter} onChange={setEditedFilter} />
 
       {/* 確認ボタン */}
       <button

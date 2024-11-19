@@ -69,7 +69,7 @@ const Header = () => {
     setActiveContent("notSelected");
   };
 
-  // currentPageが無効な場合、何も表示しない (Headerそもそもを表示しないということ)
+  // currentPageが無効な場合、何も表示しない (Headerをそもそもを表示しないということ)
   if (currentPage < 0 || currentPage >= data.length) {
     return null;
   }
