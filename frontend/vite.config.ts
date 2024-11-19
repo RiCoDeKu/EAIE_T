@@ -9,4 +9,9 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  server: {
+    host: "localhost", // ホストを指定
+    port: 3000, // ポートを指定
+    strictPort: true, // ポートが使用中の場合、エラーを出す
+  },
 });
