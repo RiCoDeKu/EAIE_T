@@ -6,7 +6,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import DiaryEntry
+from .models import DiaryEntry, PageImage
 from .serializers import DiaryEntryCreateSerializer
 from .utils import apply_filter
 
@@ -104,6 +104,56 @@ class DiaryEntryAPIView(APIView):
                     "created_at": diary_entry.created_at,
                 }
             )
+        return Response(response_data, status=status.HTTP_200_OK)
+
+
+class DiaryEntryPageImageAPIView(APIView):
+    def get(self, request):
+        page_images = PageImage.objects.all()
+        response_data = []
+        for page_image in page_images:
+            if page_image.diary.public is False:
+                continue
+            image_url = default_storage.url(page_image.image.name)
+            image_full_url = request.build_absolute_uri(image_url)
+            response_data.append(
+                {
+                    "diary_id": page_image.diary.id,
+                    "image_url": image_full_url,
+                }
+            )
+        return Response(response_data, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        diary_id = request.data.get("diary_id")
+        image = request.data.get("image")
+        diary = get_object_or_404(DiaryEntry, id=diary_id)
+        page_image = PageImage.objects.create(diary=diary, image=image)
+
+        image_url = default_storage.url(page_image.image.name)
+        image_full_url = request.build_absolute_uri(image_url)
+
+        response_data = {
+            "diary_id": page_image.diary.id,
+            "image_url": image_full_url,
+        }
+        return Response(response_data, status=status.HTTP_201_CREATED)
+
+    def put(self, request):
+        diary_id = request.data.get("diary_id")
+        image = request.data.get("image")
+        diary = get_object_or_404(DiaryEntry, id=diary_id)
+        page_image = get_object_or_404(PageImage, diary=diary)
+        page_image.image = image
+        page_image.save()
+
+        image_url = default_storage.url(page_image.image.name)
+        image_full_url = request.build_absolute_uri(image_url)
+
+        response_data = {
+            "diary_id": page_image.diary.id,
+            "image_url": image_full_url,
+        }
         return Response(response_data, status=status.HTTP_200_OK)
 
 

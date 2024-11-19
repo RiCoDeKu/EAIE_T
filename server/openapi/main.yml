@@ -71,6 +71,57 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/diaryListResponse'
+  /api/diary/page_image/:
+    get:
+      tags: [Diary]
+      summary: 日記のページ画像一覧を取得する
+      description: |
+        日記のページ画像一覧を取得する
+      responses:
+        '200':
+          description: Diary page image list retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/diaryPageImageListResponse'
+    post:
+      tags: [Diary]
+      summary: 日記のページ画像を登録する
+      description: |
+        日記のページ画像を作成する
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/diaryPageImageCreateRequest'
+      responses:
+        '201':
+          description: Diary page image uploaded successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/diaryPageImageCreateResponse'
+    put:
+      tags: [Diary]
+      summary: 日記のページ画像を更新する
+      description: |
+        日記のページ画像を更新する
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/diaryPageImageCreateRequest'
+      responses:
+        '200':
+          description: Diary page image updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/diaryPageImageCreateResponse'
 
 components:
   schemas:
@@ -159,7 +210,7 @@ components:
           type: string
           format: date-time
           example: "2024-11-13T17:05:00Z"
-    
+
     diaryListResponse:
       type: object
       properties:
@@ -173,3 +224,28 @@ components:
           $ref: '#/components/schemas/text'
         created_at:
           $ref: '#/components/schemas/created_at'
+
+    diaryPageImageCreateRequest:
+      type: object
+      properties:
+        diary_id:
+          $ref: '#/components/schemas/id'
+        image:
+          $ref: '#/components/schemas/image'
+
+    diaryPageImageCreateResponse:
+      type: object
+      properties:
+        diary_id:
+          $ref: '#/components/schemas/id'
+        image_url:
+          $ref: '#/components/schemas/url'
+
+    diaryPageImageListResponse:
+      type: object
+      properties:
+        diary_id:
+          $ref: '#/components/schemas/id'
+        image_url:
+          $ref: '#/components/schemas/url'
+
