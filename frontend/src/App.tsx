@@ -1,12 +1,10 @@
 import { Canvas } from "@react-three/fiber";
-import { Suspense, useCallback, useEffect } from "react";
+import { Suspense} from "react";
 import { Experience } from "./components/3D/Experience";
 import { Loader } from "@react-three/drei";
 import Header from "./components/Header/Header";
 import Pagination from "./components/Pagination/Pagination";
-import { dataAtom } from "./state/atom";
-import { useAtom } from "jotai";
-import { fetchData } from "./api/fetchData";
+
 
 function App() {
   // // データの一括取得
@@ -23,7 +21,7 @@ function App() {
   // }, [loadData]); // loadData を依存関係に追加
 
   return (
-    <div className="relative w-screen h-screen">
+    <div className="relative w-screen h-screen bg-custom-image">
       {/* ヘッダー */}
       <div className="w-full absolute top-20 z-10">
         <Header />

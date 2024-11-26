@@ -5,15 +5,13 @@ interface FileInputProps {
 const FileInput: React.FC<FileInputProps> = ({ onChange }) => (
   <>
     {/* 画像アップロードのラベル */}
-    <label htmlFor="imageFile" className="block text-lg font-semibold mb-2">
-      Upload Image
-    </label>
+	<a className="mt-4 block text-lg font-semibold">画像を追加</a>
     {/* 画像ファイル選択フィールド */}
     <input
       id="imageFile"
       name="imageFile"
       type="file"
-      accept=".png, .jpeg, .jpg"
+      accept=".png, .jpeg, .jpg .heic"
       onChange={(e) => onChange(e.target.files ? e.target.files[0] : null)}
       className="w-full p-2 border border-gray-300 rounded"
     />

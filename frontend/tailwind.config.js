@@ -53,5 +53,24 @@ export default {
   		}
   	}
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+	require("tailwindcss-animate"),
+	function ({ addUtilities }) {
+	  addUtilities({
+		'.bg-custom-image': {
+			'background-image': "url('./public/images/wood-texture_00008.jpg')",
+		},
+	  });
+	},
+	function ({ addUtilities }) {
+		addUtilities({
+		  '.bg-opening-book': {
+			  'background-image': "url('./public/images/open-book.png')",
+			  'background-size': 'contain',
+			  'background-repeat': 'no-repeat',
+			  'background-position': 'center',
+		  },
+		});
+	  },
+  ],
 };
