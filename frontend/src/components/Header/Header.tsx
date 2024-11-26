@@ -40,8 +40,9 @@ const Header = () => {
   useEffect(() => {
     if (pageData && activeContent === "confirm") {
       setActiveContent("edit"); // confirm時に自動でPageEditorを表示
+      setPageData(data[data.length - 1]);
     }
-  }, [pageData, activeContent]);
+  }, [pageData, activeContent, data]);
 
   // ImageUploaderを押したときの処理
   const handleUploadBtn = () => {

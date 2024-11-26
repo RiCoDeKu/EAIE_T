@@ -10,17 +10,17 @@ import { fetchData } from "./api/fetchData";
 
 function App() {
   // // データの一括取得
+  // データについては，ダミーデータを挿入しておく
+  const [, setData] = useAtom(dataAtom);
+  const loadData = useCallback(async () => {
+    const result = await fetchData();
+    setData(result);
+  }, [setData]); // setData は変更されないため、依存配列に追加
 
-  // const [, setData] = useAtom(dataAtom);
-  // const loadData = useCallback(async () => {
-  //   const result = await fetchData();
-  //   setData(result);
-  // }, [setData]); // setData は変更されないため、依存配列に追加
-
-  // // 空の依存関係配列で useEffect を設定
-  // useEffect(() => {
-  //   loadData(); // 初回レンダリング時のみ実行される
-  // }, [loadData]); // loadData を依存関係に追加
+  // 空の依存関係配列で useEffect を設定
+  useEffect(() => {
+    loadData(); // 初回レンダリング時のみ実行される
+  }, [loadData]); // loadData を依存関係に追加
 
   return (
     <div className="relative w-screen h-screen">

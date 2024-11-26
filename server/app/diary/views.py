@@ -22,8 +22,8 @@ class DiaryEntryCreateAPIView(APIView):
 
             original_image = image
             filtered_image = apply_filter(image, image_filter)
-            title = ""
-            diary_text = ""
+            title = "テキストを入力してください"
+            diary_text = "テキストを入力してください"
 
             if enable_ai:
                 ### AIの処理開始
