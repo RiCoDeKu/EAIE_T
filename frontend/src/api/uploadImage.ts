@@ -40,6 +40,7 @@ export const UploadImage = async ({
 
     // サーバからのレスポンスデータ
     const responseData = response.data;
+    console.log(responseData);
 
     // 必要な構造に変換
     const transformedData: DataItem = {
@@ -50,6 +51,7 @@ export const UploadImage = async ({
       text: responseData.text,
     };
 
+    console.log(transformedData);
     return transformedData;
   } catch (error) {
     console.error("アップロードエラー:", error);

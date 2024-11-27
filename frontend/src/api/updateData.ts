@@ -13,7 +13,7 @@ export const updateData = async (data: UpdatePageData): Promise<DataItem> => {
   try {
     // サーバーにPUTリクエストを送信
     const response = await axios.put(
-      data.id, // エンドポイント
+      "http://localhost:8000/api/diary/" + data.id + "/", // エンドポイント
       {
         title: data.title,
         text: data.text,

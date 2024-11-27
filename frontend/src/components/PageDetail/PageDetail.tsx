@@ -30,6 +30,17 @@ const PageDetail = () => {
             {data[indexData].date}
           </DrawerDescription>
 
+          {/* 画像の表示部分 */}
+
+          <div className="mt-4">
+            <h3>Image Preview:</h3>
+            <img
+              src={data[indexData].img_server_pass}
+              alt="Preview"
+              className="mt-2 max-w-full h-auto rounded"
+            />
+          </div>
+
           {/* 閉じるボタンを右上端に配置 */}
           <DrawerClose asChild>
             <button
