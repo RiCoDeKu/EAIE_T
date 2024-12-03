@@ -8,6 +8,8 @@ from .views import (
     debug_view,
 )
 
+app_name = "diary"
+
 urlpatterns = [
     path("", DiaryEntryAPIView.as_view(), name="diary-entry"),
     path("create/", DiaryEntryCreateAPIView.as_view(), name="create-diary-entry"),

@@ -7,21 +7,33 @@ import DateField from "./forms/DateField";
 import { useAtom } from "jotai";
 import { dataAtom } from "@/state/atom";
 import EffectSelector from "../ImageLoader/forms/EffectSelector";
+import { updateData } from "@/api/updateData";
 
 interface PageEditorProps {
   pageData: DataItem;
   onConfirm: () => void;
 }
 
+interface UpdatePageData {
+  id: string;
+  title: string;
+  text: string;
+  date: string;
+  image_filter: string;
+}
+
 const PageEditor: React.FC<PageEditorProps> = ({ pageData, onConfirm }) => {
   // 初期データを設定
   const initialData = pageData;
+
+  // DEBUG
+  // console.log(initialData);
 
   // 編集可能なデータの状態を管理
   const [editedTitle, setEditedTitle] = useState(initialData?.title);
   const [editedText, setEditedText] = useState(initialData?.text);
   const [editedDate, setEditedDate] = useState(initialData?.date);
-  const [editedFilter, setEditedFilter] = useState("blur"); //フィルターはデフォルトで"blur"としとく
+  const [editedFilter, setEditedFilter] = useState("original"); //フィルターはデフォルトで"blur"としとく
   const imageURL = initialData?.img_server_pass;
   const dataID = initialData?.id;
 
@@ -29,16 +41,17 @@ const PageEditor: React.FC<PageEditorProps> = ({ pageData, onConfirm }) => {
   const [, setData] = useAtom(dataAtom);
 
   // データの更新
-  const handleUpdate = (id: string) => {
-    // 更新する新しいデータを作成
-    const newItem = {
+  const handleUpdate = async (id: string) => {
+    // アップデートする情報
+    const newItem: UpdatePageData = {
       id: id,
       title: editedTitle, // 編集したタイトル
       text: editedText, // 編集したテキスト
-      date: editedDate, // 編集した日付
-      img_server_pass: imageURL, // 画像のURLは変更なし
+      date: editedDate + "T10:35:49.716241+09:00", // 編集した日付
+      image_filter: editedFilter, //適用するfilter
     };
-    const updatedItem = { ...newItem, id }; // 更新内容を仮に newItem に合わせてセット
+    const updatedItem = await updateData(newItem);
+    console.log(updatedItem);
     setData(
       (prevData) =>
         prevData.map((item) => (item.id === id ? updatedItem : item)) as Data
@@ -47,6 +60,7 @@ const PageEditor: React.FC<PageEditorProps> = ({ pageData, onConfirm }) => {
 
   // 編集内容を保存する関数
   const handleSave = async () => {
+    // DEBUG
     console.log("Edited Title:", editedTitle);
     console.log("Edited Text:", editedText);
     console.log("Edited Date:", editedDate);
@@ -54,7 +68,7 @@ const PageEditor: React.FC<PageEditorProps> = ({ pageData, onConfirm }) => {
     console.log("Image URL:", imageURL); // 画像URLは変更しない
     console.log("Data ID:", dataID);
 
-    handleUpdate(dataID);
+    await handleUpdate(dataID);
     onConfirm(); // 確定後にDrawerを閉じる
   };
 
@@ -71,7 +85,7 @@ const PageEditor: React.FC<PageEditorProps> = ({ pageData, onConfirm }) => {
       />
 
       {/* 画像の表示部分 */}
-      {imageURL ? (
+      {/* {imageURL ? (
         <div className="mt-4">
           <img
             src={imageURL}

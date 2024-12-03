@@ -4,7 +4,7 @@ import { Pages } from "@/types";
 export const generatePages = (pictures: string[]): Pages => {
   const pages = pictures.reduce((acc, _, i, arr) => {
     if (i === 0) {
-      acc.push({ front: "book-cover", back: arr[0] });
+      acc.push({ front: "textures/book-cover.jpg", back: arr[0] });
     } else if (i % 2 === 1 && i < arr.length - 1) {
       acc.push({ front: arr[i], back: arr[i + 1] });
     }
@@ -13,10 +13,16 @@ export const generatePages = (pictures: string[]): Pages => {
 
   if (pictures.length % 2 == 0) {
     // 偶数枚の画像の時は，ちょうど
-    pages.push({ front: pictures[pictures.length - 1], back: "book-back" });
+    pages.push({
+      front: pictures[pictures.length - 1],
+      back: "textures/book-back.jpg",
+    });
   } else {
     // 奇数枚の画像の時は，1ページ分余る．
-    pages.push({ front: "book-back", back: "book-back" });
+    pages.push({
+      front: "textures/book-back.jpg",
+      back: "textures/book-back.jpg",
+    });
   }
 
   return pages;

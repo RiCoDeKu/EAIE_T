@@ -21,6 +21,10 @@ down:
 bash:
 	docker compose -f compose-dev.yml exec django bash
 
+.PHONY: logs
+logs:
+	docker compose -f compose-dev.yml logs -f
+
 
 # pythonコードのリント
 .PHONY: ruff-check
@@ -37,3 +41,8 @@ ruff-format:
 ruff:
 	@make ruff-check
 	@make ruff-format
+
+# pythonコードのテスト
+.PHONY: test
+test:
+	docker compose -f compose-dev.yml exec django python manage.py test

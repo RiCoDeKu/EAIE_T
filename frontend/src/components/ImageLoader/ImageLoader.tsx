@@ -11,7 +11,9 @@ import EnableAISelector from "./forms/EnableAISelector";
 interface Props {
   setLoading: (loading: boolean) => void; // ローディング状態
   setError: (error: string | null) => void; // エラーメッセージ
-  setActiveContent: (activeContent: "edit" | "upload" | "notSelected") => void; // Drawerの表示状態の管理
+  setActiveContent: (
+    activeContent: "edit" | "upload" | "notSelected" | "confirm"
+  ) => void; // Drawerの表示状態の管理
   setPageData: (pageData: DataItem | null) => void;
 }
 
@@ -85,7 +87,6 @@ const ImageLoader: React.FC<Props> = ({
     // Drawerの状態設定
     setLoading(true);
     setError(null);
-    setActiveContent("notSelected");
 
     try {
       // 画像をアップロードし、サーバーから結果を受け取る
@@ -98,8 +99,10 @@ const ImageLoader: React.FC<Props> = ({
         date: result.date,
       };
 
+      console.log(pageData);
       setData((prevData) => [...prevData, pageData]); //データ配列に追加
       setPageData(pageData); // アップロードデータを状態にセット
+      setActiveContent("confirm");
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);
