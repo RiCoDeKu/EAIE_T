@@ -1,10 +1,10 @@
 import { useState } from "react";
+import { useAtom } from "jotai";
 import { Data, DataItem } from "@/types";
 import DrawerContainer from "../layouts/DrawerContainer";
 import TitleField from "./forms/TitleField";
 import TextareaField from "./forms/TextareaField";
 import DateField from "./forms/DateField";
-import { useAtom } from "jotai";
 import { dataAtom } from "@/state/atom";
 import EffectSelector from "../ImageLoader/forms/EffectSelector";
 import { updateData } from "@/api/updateData";

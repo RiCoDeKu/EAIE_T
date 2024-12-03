@@ -1,9 +1,12 @@
 import { Canvas } from "@react-three/fiber";
-import { Suspense} from "react";
+import { Suspense, useCallback, useEffect } from "react";
 import { Experience } from "./components/3D/Experience";
 import { Loader } from "@react-three/drei";
 import Header from "./components/Header/Header";
 import Pagination from "./components/Pagination/Pagination";
+import { dataAtom } from "./state/atom";
+import { useAtom } from "jotai";
+import { fetchData } from "./api/fetchData";
 
 
 function App() {
