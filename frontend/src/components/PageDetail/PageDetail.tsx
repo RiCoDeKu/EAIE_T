@@ -23,10 +23,10 @@ const PageDetail = () => {
     <>
       <DrawerContent className="fixed top-8 flex flex-col items-center p-6  z-50">
         <DrawerHeader className="text-center">
-          <DrawerTitle className="text-5xl font-bold">
+          <DrawerTitle className="text-5xl font-bold text-slate-300">
             {data[indexData].title}
           </DrawerTitle>
-          <DrawerDescription className="text-sm text-gray-500">
+          <DrawerDescription className="text-sm text-slate-300">
             {data[indexData].date}
           </DrawerDescription>
 
@@ -52,7 +52,7 @@ const PageDetail = () => {
           </DrawerClose>
         </DrawerHeader>
 
-        <DrawerDescription className="text-center text-gray-700">
+        <DrawerDescription className="text-center text-slate-300">
           {data[indexData].text}
         </DrawerDescription>
         <DrawerFooter className="mt-4"></DrawerFooter>

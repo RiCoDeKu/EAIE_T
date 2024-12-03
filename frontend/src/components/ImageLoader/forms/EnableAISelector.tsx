@@ -10,21 +10,24 @@ const EnableAISelector: React.FC<EnableAISelectorProps> = ({
   return (
     <>
       {/* トグルのラベル */}
-      <label className="block text-lg font-semibold mb-2">Enable AI</label>
+      <label className="block text-lg font-semibold mb-2">AIの有効化</label>
       <div className="space-y-2">
         {/* TrueとFalseの選択肢 */}
-        {["true", "false"].map((option) => (
-          <label key={option} className="flex items-center">
+        {[
+			{value: "true", label: "有効"}, 
+			{value: "false", label: "無効"},
+		].map((option) => (
+          <label key={option.value} className="flex items-center">
             <input
               type="radio"
               name="enable_ai"
-              value={option} // true または false の文字列
-              checked={value === option} // 現在の値と一致するか
+              value={option.value} // true または false の文字列
+              checked={value === option.value
+			  } // 現在の値と一致するか
               onChange={(e) => onChange(e.target.value)} // 値変更時に親に通知
               className="mr-2"
             />
-            {option.charAt(0).toUpperCase() + option.slice(1)}{" "}
-            {/* 表示用に大文字に */}
+            {option.label}
           </label>
         ))}
       </div>

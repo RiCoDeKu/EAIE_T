@@ -8,6 +8,7 @@ import { dataAtom } from "./state/atom";
 import { useAtom } from "jotai";
 import { fetchData } from "./api/fetchData";
 
+
 function App() {
   // // データの一括取得
   // データについては，ダミーデータを挿入しておく
@@ -23,7 +24,7 @@ function App() {
   }, [loadData]); // loadData を依存関係に追加
 
   return (
-    <div className="relative w-screen h-screen">
+    <div className="relative w-screen h-screen bg-custom-image">
       {/* ヘッダー */}
       <div className="w-full absolute top-20 z-10">
         <Header />

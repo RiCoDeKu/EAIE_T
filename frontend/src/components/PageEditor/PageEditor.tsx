@@ -1,10 +1,10 @@
 import { useState } from "react";
+import { useAtom } from "jotai";
 import { Data, DataItem } from "@/types";
 import DrawerContainer from "../layouts/DrawerContainer";
 import TitleField from "./forms/TitleField";
 import TextareaField from "./forms/TextareaField";
 import DateField from "./forms/DateField";
-import { useAtom } from "jotai";
 import { dataAtom } from "@/state/atom";
 import EffectSelector from "../ImageLoader/forms/EffectSelector";
 import { updateData } from "@/api/updateData";
@@ -73,10 +73,12 @@ const PageEditor: React.FC<PageEditorProps> = ({ pageData, onConfirm }) => {
   };
 
   return (
-    <DrawerContainer title="Edit Page">
-      {/* タイトル入力フォーム */}
+	<DrawerContainer title="日記の編集">
+	<div className="p-12 grid grid-cols-2 gap-4 h-[600px] w-[900px] bg-opening-book">
+    <div className="h-[100px]">
+	  {/* タイトル入力フォーム */}
       <TitleField
-        label="Title"
+        label="日記のタイトル"
         value={editedTitle}
         onChange={setEditedTitle}
         placeholder="Enter title"
@@ -85,7 +87,6 @@ const PageEditor: React.FC<PageEditorProps> = ({ pageData, onConfirm }) => {
       {/* 画像の表示部分 */}
       {/* {imageURL ? (
         <div className="mt-4">
-          <h3>Image Preview:</h3>
           <img
             src={imageURL}
             alt="Preview"
@@ -94,18 +95,19 @@ const PageEditor: React.FC<PageEditorProps> = ({ pageData, onConfirm }) => {
         </div>
       ) : (
         <p className="mt-4">No image available</p>
-      )} */}
+      )}
+	</div>
+	<div className="h-[100px]">
+	  {/* 日記の作成日入力 */}
+	  <DateField label="更新日" value={editedDate} onChange={setEditedDate} />
 
-      {/* テキスト入力フォーム */}
+      {/* 日記の内容入力 */}
       <TextareaField
-        label="Text"
+        label="日記の内容"
         value={editedText}
         onChange={setEditedText}
         placeholder="Enter text"
       />
-
-      {/* 日付入力フォーム */}
-      <DateField label="Date" value={editedDate} onChange={setEditedDate} />
 
       {/* イメージフィルター入力フォーム */}
       <EffectSelector value={editedFilter} onChange={setEditedFilter} />
@@ -115,9 +117,11 @@ const PageEditor: React.FC<PageEditorProps> = ({ pageData, onConfirm }) => {
         onClick={handleSave}
         className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
       >
-        Save
+        投稿
       </button>
-    </DrawerContainer>
+	  </div>
+	  </div>
+	</DrawerContainer>
   );
 };
 
