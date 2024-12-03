@@ -39,7 +39,7 @@ const Header = () => {
   // pageDataがセットされたら自動でPageEditorに切り替え (ImageUploader => PageEditor)
   useEffect(() => {
     if (pageData && activeContent === "confirm") {
-      setActiveContent("edit"); // confirm時に自動でPageEditorを表示
+    //   setActiveContent("edit"); // confirm時に自動でPageEditorを表示
       setPageData(data[data.length - 1]);
     }
   }, [pageData, activeContent, data]);
