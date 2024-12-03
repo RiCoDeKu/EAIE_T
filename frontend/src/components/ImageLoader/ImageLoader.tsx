@@ -101,6 +101,10 @@ const ImageLoader: React.FC<Props> = ({
 
       console.log(pageData);
       setData((prevData) => [...prevData, pageData]); //データ配列に追加
+      //////////// 初めにデータをアップロードした時にのみ発火する ////////////////
+      setData((prevData) => prevData.filter((item) => item.id !== "1"));
+      ////////////////////////////////////////////////////////////////////////
+
       setPageData(pageData); // アップロードデータを状態にセット
       setActiveContent("confirm");
     } catch (err: unknown) {
@@ -116,54 +120,52 @@ const ImageLoader: React.FC<Props> = ({
 
   return (
     <DrawerContainer title="日記を追加する">
-	<div className="p-12 grid grid-cols-2 gap-4 h-[600px] w-[900px] bg-opening-book">
-	  <div className="h-[100px]">
-      {/* 画像 */}
-      <FileInput onChange={(value) => handleChange("imageFile", value)} />
-      {formErrors.imageFile && (
-        <p className="text-red-500">{formErrors.imageFile}</p>
-      )}
+      <div className="p-12 grid grid-cols-2 gap-4 h-[600px] w-[900px] bg-opening-book">
+        <div className="h-[100px]">
+          {/* 画像 */}
+          <FileInput onChange={(value) => handleChange("imageFile", value)} />
+          {formErrors.imageFile && (
+            <p className="text-red-500">{formErrors.imageFile}</p>
+          )}
 
-      {/* AI化するか否か */}
-      <EnableAISelector
-        value={formData.enable_ai}
-        onChange={(value) => handleChange("enable_ai", value)}
-      />
+          {/* AI化するか否か */}
+          <EnableAISelector
+            value={formData.enable_ai}
+            onChange={(value) => handleChange("enable_ai", value)}
+          />
 
-      {/* エフェクト */}
-      <EffectSelector
-        value={formData.image_filter}
-        onChange={(value) => handleChange("image_filter", value)}
-      />
-	  </div>
-	  <div className="h-[100px]">
-	  {/* 日記のタイトル入力欄 */}
-	  <input
-		type="text"
-		placeholder="タイトル"
-		className="w-full p-2 border border-gray-300 rounded mt-4"
-	  />
-	  {/* 日記の作成日入力欄 */}
-	  <input
-		type="date"
-		className="w-full p-2 border border-gray-300 rounded mt-4"
-	  />
-	  {/* 日記の内容入力欄 */}
-	  <textarea
-		placeholder="日記の内容"
-		className="w-full h-[250px] p-2 border border-gray-300 rounded mt-4"
-	  />
-	{/* 確認ボタン */}
-	  <button
-        onClick={handleSubmit}
-        className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
-      >
-        投稿
-      </button>
-	  </div>
-	</div>
-
-
+          {/* エフェクト */}
+          <EffectSelector
+            value={formData.image_filter}
+            onChange={(value) => handleChange("image_filter", value)}
+          />
+        </div>
+        <div className="h-[100px]">
+          {/* 日記のタイトル入力欄 */}
+          <input
+            type="text"
+            placeholder="タイトル"
+            className="w-full p-2 border border-gray-300 rounded mt-4"
+          />
+          {/* 日記の作成日入力欄 */}
+          <input
+            type="date"
+            className="w-full p-2 border border-gray-300 rounded mt-4"
+          />
+          {/* 日記の内容入力欄 */}
+          <textarea
+            placeholder="日記の内容"
+            className="w-full h-[250px] p-2 border border-gray-300 rounded mt-4"
+          />
+          {/* 確認ボタン */}
+          <button
+            onClick={handleSubmit}
+            className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
+          >
+            投稿
+          </button>
+        </div>
+      </div>
     </DrawerContainer>
   );
 };

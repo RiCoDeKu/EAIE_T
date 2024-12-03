@@ -8,14 +8,15 @@ import { dataAtom } from "./state/atom";
 import { useAtom } from "jotai";
 import { fetchData } from "./api/fetchData";
 
-
 function App() {
   // // データの一括取得
   // データについては，ダミーデータを挿入しておく
   const [, setData] = useAtom(dataAtom);
   const loadData = useCallback(async () => {
     const result = await fetchData();
-    setData(result);
+    if (result.length !== 0) {
+      setData(result);
+    }
   }, [setData]); // setData は変更されないため、依存配列に追加
 
   // 空の依存関係配列で useEffect を設定

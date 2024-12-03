@@ -9,7 +9,7 @@ const Data: Data = [
     id: "1",
     title: "Title 1",
     date: "2024-01-01",
-    img_server_pass: "DSC00680",
+    img_server_pass: "/textures/DSC00680.jpg",
     text: "Sample text for DSC00680",
   },
   // {
