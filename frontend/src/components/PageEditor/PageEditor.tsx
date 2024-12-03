@@ -13,7 +13,7 @@ interface PageEditorProps {
   pageData: DataItem;
   onConfirm: () => void;
 }
-
+	
 interface UpdatePageData {
   id: string;
   title: string;
