@@ -6,14 +6,14 @@ import TitleField from "./forms/TitleField";
 import TextareaField from "./forms/TextareaField";
 import DateField from "./forms/DateField";
 import { dataAtom } from "@/state/atom";
-import EffectSelector from "../ImageLoader/forms/EffectSelector";
+import EffectSelector from "../ImageUploader/forms/EffectSelector";
 import { updateData } from "@/api/updateData";
 
 interface PageEditorProps {
   pageData: DataItem;
   onConfirm: () => void;
 }
-	
+
 interface UpdatePageData {
   id: string;
   title: string;
@@ -73,19 +73,19 @@ const PageEditor: React.FC<PageEditorProps> = ({ pageData, onConfirm }) => {
   };
 
   return (
-	<DrawerContainer title="日記の編集">
-	<div className="p-12 grid grid-cols-2 gap-4 h-[600px] w-[900px] bg-opening-book">
-    <div className="h-[100px]">
-	  {/* タイトル入力フォーム */}
-      <TitleField
-        label="日記のタイトル"
-        value={editedTitle}
-        onChange={setEditedTitle}
-        placeholder="Enter title"
-      />
+    <DrawerContainer title="日記の編集">
+      <div className="p-12 grid grid-cols-2 gap-4 h-[600px] w-[900px] bg-opening-book">
+        <div className="h-[100px]">
+          {/* タイトル入力フォーム */}
+          <TitleField
+            label="日記のタイトル"
+            value={editedTitle}
+            onChange={setEditedTitle}
+            placeholder="Enter title"
+          />
 
-      {/* 画像の表示部分 */}
-      {/* {imageURL ? (
+          {/* 画像の表示部分 */}
+          {/* {imageURL ? (
         <div className="mt-4">
           <img
             src={imageURL}
@@ -99,29 +99,33 @@ const PageEditor: React.FC<PageEditorProps> = ({ pageData, onConfirm }) => {
 	</div>
 	<div className="h-[100px]">
 	  {/* 日記の作成日入力 */}
-	  <DateField label="更新日" value={editedDate} onChange={setEditedDate} />
+          <DateField
+            label="更新日"
+            value={editedDate}
+            onChange={setEditedDate}
+          />
 
-      {/* 日記の内容入力 */}
-      <TextareaField
-        label="日記の内容"
-        value={editedText}
-        onChange={setEditedText}
-        placeholder="Enter text"
-      />
+          {/* 日記の内容入力 */}
+          <TextareaField
+            label="日記の内容"
+            value={editedText}
+            onChange={setEditedText}
+            placeholder="Enter text"
+          />
 
-      {/* イメージフィルター入力フォーム */}
-      <EffectSelector value={editedFilter} onChange={setEditedFilter} />
+          {/* イメージフィルター入力フォーム */}
+          <EffectSelector value={editedFilter} onChange={setEditedFilter} />
 
-      {/* 確認ボタン */}
-      <button
-        onClick={handleSave}
-        className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
-      >
-        投稿
-      </button>
-	  </div>
-	  </div>
-	</DrawerContainer>
+          {/* 確認ボタン */}
+          <button
+            onClick={handleSave}
+            className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
+          >
+            投稿
+          </button>
+        </div>
+      </div>
+    </DrawerContainer>
   );
 };
 
