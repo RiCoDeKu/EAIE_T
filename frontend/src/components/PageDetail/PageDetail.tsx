@@ -26,18 +26,18 @@ const PageDetail = () => {
           <DrawerTitle className="text-5xl font-bold text-slate-300">
             {data[indexData].title}
           </DrawerTitle>
-          <DrawerDescription className="text-sm text-slate-300">
+          <DrawerDescription className="mx-auto text-sm text-slate-300">
             {data[indexData].date}
           </DrawerDescription>
 
           {/* 画像の表示部分 */}
 
           <div className="mt-4">
-            <h3>Image Preview:</h3>
+            <h3 className="text-center text-slate-300">Image Preview</h3>
             <img
               src={data[indexData].img_server_pass}
               alt="Preview"
-              className="mt-2 max-w-full h-auto rounded"
+              className="mt-2 mx-auto max-w-full h-auto rounded"
             />
           </div>
 
