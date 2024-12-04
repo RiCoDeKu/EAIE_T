@@ -13,9 +13,11 @@ paths:
   /api/diary/create/:
     post:
       tags: [Diary]
-      summary: 日記を作成する
+      summary: 画像を受け取り、日記の雛形を生成する
       description: |
-        画像から日記を生成する
+        画像を受け取り、DBに保存し、日記の雛形を生成する。
+        このエンドポイントから返された日記IDを使用し、
+        更新エンドポイント叩くことで、閲覧可能(Public=True)な日記となる．
       requestBody:
         required: true
         content:
@@ -34,7 +36,8 @@ paths:
       tags: [Diary]
       summary: 日記を更新する
       description: |
-        日記を更新する
+        日記を更新するエンドポイント。
+        このエンドポイントを叩かれた日記が閲覧可能(Public=True)となる。
       parameters:
         - in: path
           name: id
@@ -61,7 +64,7 @@ paths:
       tags: [Diary]
       summary: 日記一覧を取得する
       description: |
-        日記一覧を取得する
+        閲覧可能(Public=True)な日記一覧を取得する
       responses:
         '200':
           description: Diary list retrieved successfully
@@ -76,7 +79,7 @@ paths:
       tags: [Diary]
       summary: 日記のページ画像一覧を取得する
       description: |
-        日記のページ画像一覧を取得する
+        閲覧可能(Public=True)な日記に紐づくページ画像の一覧を取得できます。
       responses:
         '200':
           description: Diary page image list retrieved successfully

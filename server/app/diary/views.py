@@ -47,7 +47,7 @@ class DiaryEntryCreateAPIView(APIView):
 
             # データベースに保存
             diary_entry = DiaryEntry.objects.create(
-                image=filtered_image, original_image=original_image, title=title, text=diary_text, public=True
+                image=filtered_image, original_image=original_image, title=title, text=diary_text
             )
 
             # レスポンスデータの準備
