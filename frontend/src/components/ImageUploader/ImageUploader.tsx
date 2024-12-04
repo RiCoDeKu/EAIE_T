@@ -1,40 +1,53 @@
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import { UploadImage } from "@/api/uploadImage";
-import { UploadImageParams, DataItem } from "@/types";
+import { UploadImageParams, DataItem, Data } from "@/types";
 import DrawerContainer from "@/components/layouts/DrawerContainer";
 import FileInput from "@/components/ImageUploader/forms/FileInput";
 import EffectSelector from "@/components/ImageUploader/forms/EffectSelector";
 import { useAtom } from "jotai";
 import { dataAtom } from "@/state/atom";
 import EnableAISelector from "./forms/EnableAISelector";
+import { updateData } from "@/api/updateData";
 
+interface UpdatePageData {
+  id: string;
+  title: string;
+  text: string;
+  date: string;
+  image_filter: string;
+}
 interface Props {
   setLoading: (loading: boolean) => void; // ローディング状態
   setError: (error: string | null) => void; // エラーメッセージ
-  setActiveContent: (
-    activeContent: "edit" | "upload" | "notSelected" | "confirm"
-  ) => void; // Drawerの表示状態の管理
   setPageData: (pageData: DataItem | null) => void;
+  onConfirm: () => void;
 }
 
 const ImageLoader: React.FC<Props> = ({
   setLoading,
   setError,
   setPageData,
-  setActiveContent,
+  onConfirm,
 }) => {
-  // POSTする情報
+  // グローバル
+  const [, setData] = useAtom(dataAtom); // データを追加する
+
+  // ローカル
+  // 右ページの内容
   const [formData, setFormData] = useState<UploadImageParams>({
     enable_ai: "false",
     imageFile: null as File | null,
     image_filter: "original",
   });
-  // formのエラーメッセージ
+  // 左ページの内容
+  const [title, setTitle] = useState("");
+  const [text, setText] = useState("");
+  const [date, setDate] = useState("");
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
-  // データを追加する
-  const [, setData] = useAtom(dataAtom);
 
-  // 入力変更ハンドラー
+  let dataID = "";
+
+  // 右ページの入力変更ハンドラー
   const handleChange = (
     name: keyof UploadImageParams,
     value: string | File | null
@@ -45,15 +58,12 @@ const ImageLoader: React.FC<Props> = ({
     }));
     validateField(name, value);
   };
-
   // フィールド単体のバリデーション
   const validateField = (
     name: keyof UploadImageParams,
     value: string | File | null
   ) => {
     let error = "";
-
-    // 画像ファイルが選択されていない場合
     if (name === "imageFile") {
       if (!(value instanceof File)) {
         error = "画像ファイルを選択してください";
@@ -64,7 +74,6 @@ const ImageLoader: React.FC<Props> = ({
       [name]: error,
     }));
   };
-
   // フォーム全体のバリデーション
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -77,16 +86,10 @@ const ImageLoader: React.FC<Props> = ({
   };
 
   // フォーム送信ハンドラー
-  const handleSubmit = async () => {
-    // バリデーションエラーがある場合は処理を中断
+  const handleCreateText = async () => {
     if (!validateForm()) {
       return;
     }
-
-    // Drawerの状態設定
-    setLoading(true);
-    setError(null);
-
     try {
       // 画像をアップロードし、サーバーから結果を受け取る
       const result = await UploadImage(formData);
@@ -98,14 +101,17 @@ const ImageLoader: React.FC<Props> = ({
         date: result.date,
       };
 
-      console.log(pageData);
       setData((prevData) => [...prevData, pageData]); //データ配列に追加
-      //////////// 初めにデータをアップロードした時にのみ発火する ////////////////
-      setData((prevData) => prevData.filter((item) => item.id !== "1"));
-      ////////////////////////////////////////////////////////////////////////
+      setData((prevData) => prevData.filter((item) => item.id !== "1")); //最初のデータアップロードの時のみ発火
+      dataID = pageData.id;
 
       setPageData(pageData); // アップロードデータを状態にセット
-      setActiveContent("confirm");
+      // 右ページの内容
+      if (formData.enable_ai == "true") {
+        setTitle(pageData.title);
+        setText(pageData.text);
+        setDate(pageData.date);
+      }
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);
@@ -117,30 +123,78 @@ const ImageLoader: React.FC<Props> = ({
     }
   };
 
+  // 左ページの入力欄の変更ハンドラー
+  const handleTitleChange = (e: {
+    target: { value: SetStateAction<string> };
+  }) => {
+    setTitle(e.target.value);
+  };
+  const handleDateChange = (e: {
+    target: { value: SetStateAction<string> };
+  }) => {
+    setDate(e.target.value);
+  };
+  const handleTextChange = (e: {
+    target: { value: SetStateAction<string> };
+  }) => {
+    setText(e.target.value);
+  };
+
+  const handleUpdate = async (id: string) => {
+    const newItem: UpdatePageData = {
+      id: id,
+      title: title, // 編集したタイトル
+      text: text, // 編集したテキスト
+      date: date + "T10:35:49.716241+09:00", // 編集した日付
+      image_filter: formData.image_filter, //適用するfilter
+    };
+    const updatedItem = await updateData(newItem);
+    setData(
+      (prevData) =>
+        prevData.map((item) => (item.id === id ? updatedItem : item)) as Data
+    );
+  };
+
+  // 投稿ハンドラー
+  const handleSubmit = async () => {
+    if (formData.enable_ai == "true") {
+      // AI有効化ver
+      await handleUpdate(dataID);
+    } else {
+      // AI無効化ver
+      await handleCreateText();
+      await handleUpdate(dataID);
+    }
+    onConfirm(); // 確定後にDrawerを閉じる
+  };
+
   return (
     <DrawerContainer title="日記を追加する">
       <div className="p-12 grid grid-cols-2 gap-4 h-[600px] w-[900px] bg-opening-book">
+        {/* 本の右ページ */}
         <div className="h-[100px]">
-          {/* 画像 */}
+          {/* 画像を追加 */}
           <FileInput onChange={(value) => handleChange("imageFile", value)} />
           {formErrors.imageFile && (
             <p className="text-red-500">{formErrors.imageFile}</p>
           )}
 
-          {/* AI化するか否か */}
+          {/* AIの有効か */}
           <EnableAISelector
             value={formData.enable_ai}
             onChange={(value) => handleChange("enable_ai", value)}
           />
 
-          {/* エフェクト */}
+          {/* エフェクトを追加 */}
           <EffectSelector
             value={formData.image_filter}
             onChange={(value) => handleChange("image_filter", value)}
           />
+
+          {/* 文章生成ボタン */}
           <div className="text-right">
             <button
-              onClick={handleSubmit}
+              onClick={handleCreateText}
               className={`mt-4 px-4 py-2 rounded ${
                 formData.enable_ai === "true"
                   ? "bg-blue-500 text-white"
@@ -152,22 +206,30 @@ const ImageLoader: React.FC<Props> = ({
             </button>
           </div>
         </div>
+
+        {/* 本の左ページ */}
         <div className="h-[100px]">
           {/* 日記のタイトル入力欄 */}
           <input
             type="text"
             placeholder="タイトル"
             className="w-full p-2 border border-gray-300 rounded mt-4"
+            value={title}
+            onChange={handleTitleChange}
           />
           {/* 日記の作成日入力欄 */}
           <input
             type="date"
             className="w-full p-2 border border-gray-300 rounded mt-4"
+            value={date}
+            onChange={handleDateChange}
           />
           {/* 日記の内容入力欄 */}
           <textarea
             placeholder="日記の内容"
             className="w-full h-[250px] p-2 border border-gray-300 rounded mt-4"
+            value={text}
+            onChange={handleTextChange}
           />
           {/* 確認ボタン */}
           <button

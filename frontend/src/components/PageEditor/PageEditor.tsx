@@ -84,21 +84,7 @@ const PageEditor: React.FC<PageEditorProps> = ({ pageData, onConfirm }) => {
             placeholder="Enter title"
           />
 
-          {/* 画像の表示部分 */}
-          {/* {imageURL ? (
-        <div className="mt-4">
-          <img
-            src={imageURL}
-            alt="Preview"
-            className="mt-2 max-w-full h-auto rounded"
-          />
-        </div>
-      ) : (
-        <p className="mt-4">No image available</p>
-      )}
-	</div>
-	<div className="h-[100px]">
-	  {/* 日記の作成日入力 */}
+          {/* 日記の作成日入力 */}
           <DateField
             label="更新日"
             value={editedDate}
