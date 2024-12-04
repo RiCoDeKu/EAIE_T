@@ -138,20 +138,19 @@ const ImageLoader: React.FC<Props> = ({
             value={formData.image_filter}
             onChange={(value) => handleChange("image_filter", value)}
           />
-<<<<<<< HEAD
-=======
-		<div className="text-right">
-		<button
-			onClick={handleSubmit}
-			className={`mt-4 px-4 py-2 rounded ${
-			formData.enable_ai === "true" ? "bg-blue-500 text-white" : "bg-gray-500 text-gray-300"
-			}`}
-			disabled={formData.enable_ai !== "true"}
-		>
-			文章生成
-		</button>
-		</div>
->>>>>>> main
+          <div className="text-right">
+            <button
+              onClick={handleSubmit}
+              className={`mt-4 px-4 py-2 rounded ${
+                formData.enable_ai === "true"
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-500 text-gray-300"
+              }`}
+              disabled={formData.enable_ai !== "true"}
+            >
+              文章生成
+            </button>
+          </div>
         </div>
         <div className="h-[100px]">
           {/* 日記のタイトル入力欄 */}
