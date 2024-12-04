@@ -27,7 +27,7 @@ function App() {
   return (
     <div className="relative w-screen h-screen bg-custom-image">
       {/* ヘッダー */}
-      <div className="w-full absolute top-20 z-10">
+      <div className="w-full absolute top-5 z-10">
         <Header />
       </div>
 
@@ -42,7 +42,7 @@ function App() {
       </div>
 
       {/* ページネーションボタン */}
-      <div className="w-full absolute bottom-10  z-10 flex justify-center">
+      <div className="w-full absolute bottom-5  z-10 flex justify-center">
         <Pagination />
       </div>
     </div>

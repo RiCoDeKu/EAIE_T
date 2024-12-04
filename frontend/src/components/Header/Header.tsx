@@ -55,7 +55,7 @@ const Header = () => {
     setActiveContent("upload");
   };
 
-  // Editorで確定した時のリセット処理
+  // 確定した時のリセット処理
   const handleDrawerClose = () => {
     setIsOpen(false);
     setError(null);

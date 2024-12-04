@@ -169,7 +169,7 @@ const ImageLoader: React.FC<Props> = ({
   };
 
   return (
-    <DrawerContainer title="日記を追加する">
+    <DrawerContainer title="日記の追加">
       <div className="p-12 grid grid-cols-2 gap-4 h-[600px] w-[900px] bg-opening-book">
         {/* 本の右ページ */}
         <div className="h-[100px]">
