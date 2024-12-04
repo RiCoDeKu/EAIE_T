@@ -1,7 +1,10 @@
+import json
 import sys
 from io import BytesIO
 
+from django.conf import settings
 from django.core.files.uploadedfile import InMemoryUploadedFile
+from openai import OpenAI
 from PIL import Image, ImageEnhance, ImageFilter, ImageOps
 
 
@@ -49,3 +52,44 @@ def apply_filter(image, image_filter):
     return InMemoryUploadedFile(
         buffer, None, f"filtered_{image.name}", f"image/{original_format.lower()}", sys.getsizeof(buffer), None
     )
+
+
+client = OpenAI(
+    api_key=settings.OPENAI_API_KEY,
+)
+
+prompt = """
+タイトルと100文字くらいの日記を以下のjson形式で出力して
+{
+    "title": "title",
+    "comment": "The person is relaxing and not engaged in studying activities."
+}
+
+Notes:
+- Confirm that data = json.loads(your response) does not produce an error.
+- Do not format the response as a code block, such as in markdown.
+"""
+
+
+def get_ai_response(base64_image: str) -> dict:
+    """Get AI response from OpenAI API."""
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {
+                "role": "user",
+                "content": [
+                    {"type": "text", "text": prompt},
+                    {
+                        "type": "image_url",
+                        "image_url": {"url": f"data:image/jpeg;base64,{base64_image}", "detail": "low"},
+                    },
+                ],
+            }
+        ],
+        max_tokens=300,
+    )
+    data = response.choices[0].message.content
+    if data is not None:
+        return json.loads(data)
+    return {"title": "生成に失敗!", "comment": "AIから適切なレスポンスを得られませんでした。"}
