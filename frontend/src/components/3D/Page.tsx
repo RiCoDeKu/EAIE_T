@@ -116,22 +116,12 @@ const Page: React.FC<PageProps> = ({
       useTexture.preload(page.front);
       useTexture.preload(page.back);
     });
-
-    // ダミーデータ用
-    // pages.forEach((page) => {
-    //   useTexture.preload(`textures/${page.front}.jpg`);
-    //   useTexture.preload(`textures/${page.back}.jpg`);
-    // });
   }, [pages]);
   // 表裏(+-Z方向)の画像の設定
   const [picture, picture2] = useTexture([
     // サーバー
     front, // 画像のパス
     back, // 画像のパス
-
-    // ダミーデータ用
-    // `/textures/${front}.jpg`, // 画像のパス
-    // `/textures/${back}.jpg`, // 画像のパス
   ]);
   picture.colorSpace = picture2.colorSpace = SRGBColorSpace; // 色空間の統一
 
