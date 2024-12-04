@@ -1,4 +1,4 @@
-import { SetStateAction, useState } from "react";
+import { SetStateAction, useRef, useState } from "react";
 import { UploadImage } from "@/api/uploadImage";
 import { UploadImageParams, DataItem, Data } from "@/types";
 import DrawerContainer from "@/components/layouts/DrawerContainer";
@@ -44,8 +44,7 @@ const ImageLoader: React.FC<Props> = ({
   const [text, setText] = useState("");
   const [date, setDate] = useState("");
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
-
-  let dataID = "";
+  const dataIDRef = useRef(""); // useRef で変数を保持
 
   // 右ページの入力変更ハンドラー
   const handleChange = (
@@ -103,8 +102,8 @@ const ImageLoader: React.FC<Props> = ({
 
       setData((prevData) => [...prevData, pageData]); //データ配列に追加
       setData((prevData) => prevData.filter((item) => item.id !== "1")); //最初のデータアップロードの時のみ発火
-      dataID = pageData.id;
-
+      dataIDRef.current = pageData.id;
+      console.log("createText", dataIDRef.current);
       setPageData(pageData); // アップロードデータを状態にセット
       // 右ページの内容
       if (formData.enable_ai == "true") {
@@ -159,11 +158,12 @@ const ImageLoader: React.FC<Props> = ({
   const handleSubmit = async () => {
     if (formData.enable_ai == "true") {
       // AI有効化ver
-      await handleUpdate(dataID);
+      console.log("AI", dataIDRef.current);
+      await handleUpdate(dataIDRef.current);
     } else {
       // AI無効化ver
       await handleCreateText();
-      await handleUpdate(dataID);
+      await handleUpdate(dataIDRef.current);
     }
     onConfirm(); // 確定後にDrawerを閉じる
   };
