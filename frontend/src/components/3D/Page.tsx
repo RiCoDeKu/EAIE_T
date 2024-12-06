@@ -7,6 +7,7 @@ import {
   Euler,
   Float32BufferAttribute,
   MathUtils,
+  MeshPhysicalMaterial,
   MeshStandardMaterial,
   Skeleton,
   SkinnedMesh,
@@ -116,22 +117,12 @@ const Page: React.FC<PageProps> = ({
       useTexture.preload(page.front);
       useTexture.preload(page.back);
     });
-
-    // ダミーデータ用
-    // pages.forEach((page) => {
-    //   useTexture.preload(`textures/${page.front}.jpg`);
-    //   useTexture.preload(`textures/${page.back}.jpg`);
-    // });
   }, [pages]);
   // 表裏(+-Z方向)の画像の設定
   const [picture, picture2] = useTexture([
     // サーバー
     front, // 画像のパス
     back, // 画像のパス
-
-    // ダミーデータ用
-    // `/textures/${front}.jpg`, // 画像のパス
-    // `/textures/${back}.jpg`, // 画像のパス
   ]);
   picture.colorSpace = picture2.colorSpace = SRGBColorSpace; // 色空間の統一
 
@@ -158,21 +149,30 @@ const Page: React.FC<PageProps> = ({
     // ページ(直方体)の表裏(+-Z方向)の設定
     const materials = [
       ...pageMaterials,
-      new MeshStandardMaterial({
-        color: whiteColor, // マテリアルの基本色 (白)
-        map: picture, // テクスチャ
-        roughness: 0.1, // 表面の粗さ
-        emissive: emissiveColor, // 自己発光の色 (ここではオレンジ色)
-        emissiveIntensity: 0, // 自己発光の強さ（0に設定されているので発光しない）
+      new MeshPhysicalMaterial({
+        color: whiteColor, // 白色
+        map: picture, // 紙のテクスチャ
+        roughness: 0.5, // 高めの粗さでざらついた表面
+        metalness: 0, // 金属感なし
+        emissive: emissiveColor, // 自己発光（今回は無効）
+        emissiveIntensity: 0, // 発光なし
+        bumpScale: 0.1, // バンプマップの強さ
+        clearcoat: 0.1, // 微妙な光沢
+        clearcoatRoughness: 0.7, // 光沢の粗さ（紙の自然な光沢感）
       }),
-      new MeshStandardMaterial({
+      new MeshPhysicalMaterial({
         color: whiteColor,
-        map: picture2,
-        roughness: 0.1,
+        map: picture2, // 他のページのテクスチャ
+        roughness: 0.5,
+        metalness: 0,
         emissive: emissiveColor,
         emissiveIntensity: 0,
+        bumpScale: 0.1,
+        clearcoat: 0.1,
+        clearcoatRoughness: 0.7,
       }),
     ];
+
     // スキンメッシュの作成 (ボーンとメッシュを結びつける)
     const mesh = new SkinnedMesh(pageGeometry, materials); // (geometry,texture) => mesh
     mesh.castShadow = true; // メッシュが影を投影する

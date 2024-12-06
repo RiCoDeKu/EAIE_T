@@ -15,13 +15,13 @@ export const generatePages = (pictures: string[]): Pages => {
     // 偶数枚の画像の時は，ちょうど
     pages.push({
       front: pictures[pictures.length - 1],
-      back: "textures/book-back.jpg",
+      back: "textures/book-cover.jpg",
     });
   } else {
     // 奇数枚の画像の時は，1ページ分余る．
     pages.push({
       front: "textures/book-back.jpg",
-      back: "textures/book-back.jpg",
+      back: "textures/book-cover.jpg",
     });
   }
 
