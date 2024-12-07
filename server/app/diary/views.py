@@ -1,5 +1,8 @@
 # diary/views.py
 
+import base64
+from io import BytesIO
+
 from django.core.files.storage import default_storage
 from django.shortcuts import get_object_or_404, render
 from rest_framework import status
@@ -8,11 +11,22 @@ from rest_framework.views import APIView
 
 from .models import DiaryEntry, PageImage
 from .serializers import DiaryEntryCreateSerializer
-from .utils import apply_filter, predict_weather
+
+from .utils import apply_filter, get_ai_response, predict_weather
 
 
 class DiaryEntryCreateAPIView(APIView):
     def post(self, request):
+        # リクエストから画像データを取得
+        image_file = request.FILES.get("image")
+        if not image_file:
+            return Response({"error": "Image file is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # 画像データをコピーしてBase64エンコーディング
+        image_copy = BytesIO(image_file.read())
+        image_file.seek(0)  # 元の画像データのポインタをリセット
+        base64_encoded = base64.b64encode(image_copy.read()).decode("utf-8")
+
         serializer = DiaryEntryCreateSerializer(data=request.data)
         if serializer.is_valid():
             # 画像の保存
@@ -22,16 +36,14 @@ class DiaryEntryCreateAPIView(APIView):
 
             original_image = image
             filtered_image = apply_filter(image, image_filter)
+
             title = "テキストを入力してください"
             diary_text = "テキストを入力してください"
 
             if enable_ai:
-                ### AIの処理開始
-                # 日記のタイトルを生成
-                title = "夕暮れの海辺"
-                # 日記のテキストを生成
-                diary_text = "今日の夕暮れ、ふと海辺に立ち寄ると、美しい風景が広がっていました。"
-
+                json_data = get_ai_response(base64_encoded)
+                title = json_data["title"]
+                diary_text = json_data["comment"]
                 ### AIの処理終了
 
 			# 天気予測

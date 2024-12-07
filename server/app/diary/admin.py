@@ -5,4 +5,3 @@ from .models import DiaryEntry, PageImage
 
 admin.site.register(DiaryEntry)
 admin.site.register(PageImage)
-
