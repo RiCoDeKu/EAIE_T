@@ -12,10 +12,18 @@ dev:
 	@make dev-up-d
 	@cd ../frontend && npm run dev --silent
 
+.PHONY: dev-frontend
+dev-front:
+	@cd ../frontend && npm run dev --silent
+
+.PHONY: dev-server
+dev-back:
+	@make dev-build
+	@make dev-up-d
+
 .PHONY: down
 down:
 	docker compose -f compose-dev.yml down
-	@cd ../frontend && kill -9 44170
 
 .PHONY: bash
 bash:

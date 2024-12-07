@@ -8,6 +8,7 @@ interface UploadResponse {
   image_url: string;
   text: string;
   created_at: string;
+  weather_prediction: string;
 }
 
 // 画像をアップロードし，サーバのレスポンスデータからDataオブジェクト作成
@@ -49,6 +50,7 @@ export const UploadImage = async ({
       date: responseData.created_at.split("T")[0], // 日付部分だけ取得
       img_server_pass: responseData.image_url, // URLはすべて取得
       text: responseData.text,
+	  weather_prediction: responseData.weather_prediction,
     };
 
     console.log(transformedData);

@@ -15,6 +15,7 @@ interface UpdatePageData {
   text: string;
   date: string;
   image_filter: string;
+  weather_prediction: string;
 }
 interface Props {
   setLoading: (loading: boolean) => void; // ローディング状態
@@ -43,6 +44,7 @@ const ImageLoader: React.FC<Props> = ({
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
   const [date, setDate] = useState("");
+  const [weather_prediction, setWeather_prediction] = useState("");
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const dataIDRef = useRef(""); // useRef で変数を保持
 
@@ -92,12 +94,14 @@ const ImageLoader: React.FC<Props> = ({
     try {
       // 画像をアップロードし、サーバーから結果を受け取る
       const result = await UploadImage(formData);
+	  console.log("UPLOAD_WITH_INFORMATION: ", result);
       const pageData = {
         id: result.id, //サーバからのid
         title: result.title, //サーバーからの生成タイトル
         text: result.text, // サーバーからの生成テキスト
         img_server_pass: result.img_server_pass, // サーバーからの画像URL
         date: result.date,
+		weather_prediction: convertWeatherToEnglish(result.weather_prediction),
       };
 
       setData((prevData) => [...prevData, pageData]); //データ配列に追加
@@ -110,6 +114,7 @@ const ImageLoader: React.FC<Props> = ({
         setTitle(pageData.title);
         setText(pageData.text);
         setDate(pageData.date);
+		setWeather_prediction(convertWeatherToJapanese(pageData.weather_prediction));
       }
     } catch (err: unknown) {
       if (err instanceof Error) {
@@ -120,6 +125,34 @@ const ImageLoader: React.FC<Props> = ({
     } finally {
       setLoading(false);
     }
+  };
+
+  // 天気を日本語に変換する
+  const convertWeatherToJapanese = (weather_prediction: string) => {
+	switch (weather_prediction) {
+	  case "sunny":
+		return "天気: 晴れ";
+	  case "cloudy":
+		return "天気: 曇り";
+	  case "rainy":
+		return "天気: 雨";
+	  default:
+		return "天気:" + weather_prediction;
+	}
+  };
+
+  // 天気を英語に変換する
+  const convertWeatherToEnglish = (weather_prediction: string) => {
+	switch (weather_prediction) {
+	  case "天気: 晴れ":
+		return "sunny";
+	  case "天気: 曇り":
+		return "cloudy";
+	  case "天気: 雨":
+		return "rainy";
+	  default:
+		return weather_prediction;
+	}
   };
 
   // 左ページの入力欄の変更ハンドラー
@@ -138,6 +171,11 @@ const ImageLoader: React.FC<Props> = ({
   }) => {
     setText(e.target.value);
   };
+  const handleWeatherChange = (e: {
+	target: { value: SetStateAction<string> };
+  }) => {
+	setWeather_prediction(e.target.value);
+  }
 
   const handleUpdate = async (id: string) => {
     const newItem: UpdatePageData = {
@@ -146,6 +184,7 @@ const ImageLoader: React.FC<Props> = ({
       text: text, // 編集したテキスト
       date: date + "T10:35:49.716241+09:00", // 編集した日付
       image_filter: formData.image_filter, //適用するfilter
+	  weather_prediction: convertWeatherToEnglish(weather_prediction), //編集した天気
     };
     const updatedItem = await updateData(newItem);
     setData(
@@ -224,6 +263,14 @@ const ImageLoader: React.FC<Props> = ({
             value={date}
             onChange={handleDateChange}
           />
+		  {/* 天気予報 */}
+		  <input
+			type="text"
+			placeholder="天気"
+			className="w-full p-2 border border-gray-300 rounded mt-4"
+			value={weather_prediction}
+			onChange={handleWeatherChange}
+		  />
           {/* 日記の内容入力欄 */}
           <textarea
             placeholder="日記の内容"

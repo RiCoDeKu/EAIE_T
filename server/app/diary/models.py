@@ -21,6 +21,7 @@ class DiaryEntry(models.Model):
     text = models.TextField()
     public = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    weather_prediction = models.CharField(max_length=100)
 
     def __str__(self):
         return f"Diary Entry {self.id} - {self.created_at}"

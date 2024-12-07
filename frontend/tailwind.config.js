@@ -58,14 +58,14 @@ export default {
     function ({ addUtilities }) {
       addUtilities({
         ".bg-custom-image": {
-          "background-image": "url('./public/images/wood-texture.jpg')",
+          "background-image": "url('./images/wood-texture.jpg')",
         },
       });
     },
     function ({ addUtilities }) {
       addUtilities({
         ".bg-opening-book": {
-          "background-image": "url('./public/images/open-book.png')",
+          "background-image": "url('./images/open-book.png')",
           "background-size": "contain",
           "background-repeat": "no-repeat",
           "background-position": "center",
