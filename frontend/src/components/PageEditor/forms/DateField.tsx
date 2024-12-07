@@ -15,6 +15,7 @@ const DateField: React.FC<DateFieldProps> = ({ label, value, onChange }) => (
       value={value}
       onChange={(e) => onChange(e.target.value)}
       className="w-full p-2 border border-gray-300 rounded"
+	  disabled = {true}
     />
   </div>
 );

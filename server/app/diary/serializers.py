@@ -7,6 +7,7 @@ class DiaryEntryCreateSerializer(serializers.Serializer):
     image_filter = serializers.ChoiceField(
         choices=["blur", "illustration_style", "hue_inversion", "posterization", "original"], required=True
     )
+    weather_prediction = serializers.CharField(read_only = True)
 
     def validate(self, data):
         # カスタムバリデーション (例: 画像サイズ制限)

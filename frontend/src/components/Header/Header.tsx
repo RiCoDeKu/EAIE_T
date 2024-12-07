@@ -1,5 +1,5 @@
 import { DataItem } from "@/types";
-import ImageLoader from "../ImageLoader/ImageLoader";
+import ImageLoader from "../ImageUploader/ImageUploader";
 import PageDetail from "../PageDetail/PageDetail";
 import PageEditor from "../PageEditor/PageEditor";
 import {
@@ -19,12 +19,12 @@ const Header = () => {
   const [error, setError] = useState<string | null>(null); // エラーメッセージ
   const [pageData, setPageData] = useState<DataItem | null>(null); // 現在のページのData
   const [activeContent, setActiveContent] = useState<
-    "edit" | "upload" | "notSelected" | "confirm"
+    "edit" | "upload" | "notSelected"
   >("notSelected"); //表示コンテンツの制御
 
   // グローバル状態からデータを取得
   const currentImgFile = useAtomValue(currentImgFileAtom); // 現在選択されている画像ファイルのIndex
-  const data = useAtomValue(dataAtom); // ページデータのリスト
+  const data = useAtomValue(dataAtom); // データ配列
 
   // currentImgFileが指定されていない場合は-1、それ以外はそのIDに基づくページインデックス
   const currentPage = currentImgFile ? currentImgFile - 1 : -1;
@@ -35,14 +35,6 @@ const Header = () => {
       setPageData(data[currentPage]);
     }
   }, [currentPage, data]);
-
-  // pageDataがセットされたら自動でPageEditorに切り替え (ImageUploader => PageEditor)
-  useEffect(() => {
-    if (pageData && activeContent === "confirm") {
-      setActiveContent("edit"); // confirm時に自動でPageEditorを表示
-      setPageData(data[data.length - 1]);
-    }
-  }, [pageData, activeContent, data]);
 
   // ImageUploaderを押したときの処理
   const handleUploadBtn = () => {
@@ -63,7 +55,7 @@ const Header = () => {
     setActiveContent("upload");
   };
 
-  // Editorで確定した時のリセット処理
+  // 確定した時のリセット処理
   const handleDrawerClose = () => {
     setIsOpen(false);
     setError(null);
@@ -74,6 +66,7 @@ const Header = () => {
   if (currentPage < 0 || currentPage >= data.length) {
     return null;
   }
+
   return (
     <div className="flex justify-center text-2xl gap-10 text-white">
       <Drawer open={isOpen} onClose={() => setIsOpen(false)}>
@@ -107,8 +100,8 @@ const Header = () => {
             <ImageLoader
               setLoading={setLoading}
               setError={setError}
-              setActiveContent={setActiveContent}
               setPageData={setPageData}
+              onConfirm={handleDrawerClose}
             />
           )}
 

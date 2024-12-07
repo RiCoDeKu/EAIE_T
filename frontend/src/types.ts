@@ -6,6 +6,7 @@ export interface DataItem {
   date: string;
   img_server_pass: string;
   text: string;
+  weather_prediction: string;
 }
 // Data配列
 export type Data = DataItem[];

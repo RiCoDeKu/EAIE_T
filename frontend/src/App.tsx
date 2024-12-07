@@ -8,14 +8,15 @@ import { dataAtom } from "./state/atom";
 import { useAtom } from "jotai";
 import { fetchData } from "./api/fetchData";
 
-
 function App() {
   // // データの一括取得
   // データについては，ダミーデータを挿入しておく
   const [, setData] = useAtom(dataAtom);
   const loadData = useCallback(async () => {
     const result = await fetchData();
-    setData(result);
+    if (result.length !== 0) {
+      setData(result);
+    }
   }, [setData]); // setData は変更されないため、依存配列に追加
 
   // 空の依存関係配列で useEffect を設定
@@ -26,7 +27,7 @@ function App() {
   return (
     <div className="relative w-screen h-screen bg-custom-image">
       {/* ヘッダー */}
-      <div className="w-full absolute top-20 z-10">
+      <div className="w-full absolute top-5 z-10">
         <Header />
       </div>
 
@@ -41,7 +42,7 @@ function App() {
       </div>
 
       {/* ページネーションボタン */}
-      <div className="w-full absolute bottom-10  z-10 flex justify-center">
+      <div className="w-full absolute bottom-5  z-10 flex justify-center">
         <Pagination />
       </div>
     </div>

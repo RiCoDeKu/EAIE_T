@@ -12,7 +12,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 
-import environ
+import environ # type: ignore
+import os
 
 env = environ.Env()
 

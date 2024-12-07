@@ -7,7 +7,6 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from openai import OpenAI
 from PIL import Image, ImageEnhance, ImageFilter, ImageOps
 
-
 def apply_filter(image, image_filter):
     """
     Apply the specified filter to the input image and return it as an InMemoryUploadedFile.
@@ -53,7 +52,6 @@ def apply_filter(image, image_filter):
         buffer, None, f"filtered_{image.name}", f"image/{original_format.lower()}", sys.getsizeof(buffer), None
     )
 
-
 client = OpenAI(
     api_key=settings.OPENAI_API_KEY,
 )
@@ -93,3 +91,23 @@ def get_ai_response(base64_image: str) -> dict:
     if data is not None:
         return json.loads(data)
     return {"title": "生成に失敗!", "comment": "AIから適切なレスポンスを得られませんでした。"}
+
+def predict_weather(image):
+    """
+    Predict the weather based on the average pixel value of the image.
+    Args:
+        image: The uploaded image file.
+    Returns:
+        weather: A string representing the predicted weather.
+    """
+    pil_image = Image.open(image)
+    pil_image = pil_image.convert("RGB")
+    pixels = list(pil_image.getdata())
+    avg_pixel_value = sum(sum(pixel) for pixel in pixels) / len(pixels) / 3
+
+    if avg_pixel_value < 85:
+        return "rainy"
+    elif avg_pixel_value < 170:
+        return "cloudy"
+    else:
+        return "sunny"
