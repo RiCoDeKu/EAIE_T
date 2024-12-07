@@ -7,6 +7,7 @@ interface ResponseData {
   created_at: string; // ISO形式の日時を保持
   image_url: string;
   text: string;
+  weather_prediction: string;
 }
 
 // Data配列を一括取得する
@@ -24,6 +25,7 @@ export const fetchData = async (): Promise<Data> => {
       date: responseData.created_at.split("T")[0], // 日付部分だけ取得
       img_server_pass: responseData.image_url, // URLはそのまま取得
       text: responseData.text,
+	  weather_prediction: responseData.weather_prediction,
     }));
 
     return transformedData;

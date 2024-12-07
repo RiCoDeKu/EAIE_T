@@ -156,6 +156,9 @@ components:
       type: string
       format: uri
       example: "https://example.com/media/uploads/image.jpg"
+    weather_prediction:
+      type: string
+      example: "Sunny"
 
     diaryCreateRequest:
       type: object
@@ -165,7 +168,7 @@ components:
         image:
           $ref: '#/components/schemas/image'
         image_filter:
-            $ref: '#/components/schemas/image_filter'
+          $ref: '#/components/schemas/image_filter'
 
     diaryCreateResponse:
       type: object
@@ -180,6 +183,8 @@ components:
           $ref: '#/components/schemas/text'
         created_at:
           $ref: '#/components/schemas/created_at'
+        weather_prediction:
+          $ref: '#/components/schemas/weather_prediction'
 
     diaryPatchRequest:
       type: object
@@ -248,4 +253,3 @@ components:
           $ref: '#/components/schemas/id'
         image_url:
           $ref: '#/components/schemas/url'
-

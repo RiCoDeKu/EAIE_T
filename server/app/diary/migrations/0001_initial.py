@@ -19,6 +19,7 @@ class Migration(migrations.Migration):
                 ('image', models.ImageField(upload_to='uploads/')),
                 ('text', models.TextField()),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('weather_prediction', models.CharField(max_length=100)),
             ],
         ),
     ]

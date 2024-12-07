@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 
 from .models import DiaryEntry, PageImage
 from .serializers import DiaryEntryCreateSerializer
-from .utils import apply_filter
+from .utils import apply_filter, predict_weather
 
 
 class DiaryEntryCreateAPIView(APIView):
@@ -34,6 +34,9 @@ class DiaryEntryCreateAPIView(APIView):
 
                 ### AIの処理終了
 
+			# 天気予測
+            weather_prediction = predict_weather(image)
+            
             # データベースに保存
             diary_entry = DiaryEntry.objects.create(
                 image=filtered_image, original_image=original_image, title=title, text=diary_text
@@ -49,6 +52,7 @@ class DiaryEntryCreateAPIView(APIView):
                 "image_url": image_full_url,
                 "text": diary_entry.text,
                 "created_at": diary_entry.created_at,
+                "weather_prediction": weather_prediction,
             }
             return Response(response_data, status=status.HTTP_201_CREATED)
 
@@ -62,6 +66,7 @@ class DiaryEntryDetailAPIView(APIView):
         title = request.data.get("title", "")
         created_at = request.data.get("created_at", diary_entry.created_at)
         image_filter = request.data.get("image_filter", "original")
+        weather_prediction = request.data.get("weather_prediction", "")
 
         if image_filter != "":
             filtered_image = apply_filter(diary_entry.original_image, image_filter)
@@ -73,6 +78,7 @@ class DiaryEntryDetailAPIView(APIView):
         diary_entry.title = title
         diary_entry.created_at = created_at
         diary_entry.public = True
+        diary_entry.weather_prediction = weather_prediction
         diary_entry.save()
 
         image_url = default_storage.url(diary_entry.image.name)
@@ -84,6 +90,7 @@ class DiaryEntryDetailAPIView(APIView):
             "image_url": image_full_url,
             "text": diary_entry.text,
             "created_at": diary_entry.created_at,
+            "weather_prediction": diary_entry.weather_prediction,
         }
         return Response(response_data, status=status.HTTP_200_OK)
 
@@ -102,6 +109,7 @@ class DiaryEntryAPIView(APIView):
                     "image_url": image_full_url,
                     "text": diary_entry.text,
                     "created_at": diary_entry.created_at,
+                    "weather_prediction": diary_entry.weather_prediction,
                 }
             )
         return Response(response_data, status=status.HTTP_200_OK)
