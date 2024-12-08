@@ -71,9 +71,18 @@ const Header = () => {
     <div className="flex justify-center text-2xl gap-10 text-white">
       <Drawer open={isOpen} onClose={() => setIsOpen(false)}>
         {/* Upload用のDrawerTrigger */}
-        <DrawerTrigger onClick={handleUploadBtn}>ImageUploader</DrawerTrigger>
+		<DrawerTrigger 
+		  onClick={handleUploadBtn} 
+		  className="border border-white p-2 rounded-full hover:bg-white hover:text-black transition-colors duration-200 w-40 text-center"
+		>
+		  新規投稿
+		</DrawerTrigger>
         {/* Edit用のDrawerTrigger */}
-        <DrawerTrigger onClick={handleEditorBtn}>PageEditor</DrawerTrigger>
+        <DrawerTrigger 
+		onClick={handleEditorBtn}
+		className="border border-white p-2 rounded-full hover:bg-white hover:text-black transition-colors duration-200 w-40 text-center"
+		>
+			編集</DrawerTrigger>
 
         <DrawerContent className="fixed top-8 flex flex-col items-center">
           <DrawerClose />
@@ -112,7 +121,10 @@ const Header = () => {
         </DrawerContent>
       </Drawer>
       <Drawer>
-        <DrawerTrigger>PageDetail</DrawerTrigger>
+        <DrawerTrigger
+				  className="border border-white p-2 rounded-full hover:bg-white hover:text-black transition-colors duration-200 w-40 text-center"
+				  >
+					詳細</DrawerTrigger>
         <PageDetail />
       </Drawer>
     </div>
