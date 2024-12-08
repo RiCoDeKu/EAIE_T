@@ -71,6 +71,10 @@ Notes:
 
 def get_ai_response(base64_image: str) -> dict:
     """Get AI response from OpenAI API."""
+
+    if not settings.OPENAI_API_KEY:
+        return {"title": "OpenAI APIキーが設定されていません", "comment": "OpenAI APIキーを設定してください。"}
+
     response = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
