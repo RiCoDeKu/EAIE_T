@@ -1,24 +1,24 @@
 # EAIE_T
 This repository was created for Taniguchi Lab's Exercises in Applied Information Engineering.
 
-# 毎日の絵日記プロジェクト
+# Daily Picture Diary
 
-このプロジェクトは、画像をアップロードし、AIを使用して日記のタイトルと内容を自動生成するWebアプリケーションです。ユーザーは日記を作成、編集、閲覧することができ、3Dの本の形で日記を表示することができます。
+This application, developed in this project, allows users to upload images and automatically generates diary titles and content using AI. Users can create, edit, and view diaries, which are displayed in a 3D book format.
 
-## 環境構築手順
+## Environment Setup Instructions
 
-### 1. プロジェクトのダウンロード
+### 1. Download the Project
 
-まず、GitHubからプロジェクトをクローンします。
+First, clone the project from GitHub.
 
 ```bash
-git clone https://github.com/your-username/your-repo-name.git
-cd your-repo-name
+git clone https://github.com/RiCoDeKu/EAIE_T.git
+cd EAIE_T
 ```
 
-### 2. .envファイルの作成
+### 2. Create a .env File
 
-プロジェクトのルートディレクトリに `.env` ファイルを作成し、以下の内容を記述します。特に、OpenAI APIキーを取得し、設定してください。
+Create a `.env` file in the root directory of the project and include the following content. This project uses `gpt-4o-mini`, so ensure you obtain and configure your OpenAI API key in the `.env` file.
 
 ```env
 COMPOSE_PROJECT_NAME=eaie_t_server
@@ -42,39 +42,38 @@ http://localhost:8000"
 OPENAI_API_KEY=your-openai-api-key
 ```
 
-### 3. プロジェクトの起動
+### 3. Start the Project
 
-`Makefile` を使用してプロジェクトを起動します（Dockerイメージは自動的に作成されます）。
+Use the `Makefile` to start the project (Docker images will be created automatically).
 
 ```bash
 cd server
 make dev
 ```
 
-これにより、バックエンド（Django）とフロントエンド（React）が起動します。
+This will start both the backend (Django) and the frontend (React).
 
-### 4. アプリケーションへのアクセス
+### 4. Access the Application
 
-ブラウザを開き、以下のURLにアクセスします。
+Open your browser and navigate to the following URL:
 
-```
-http://localhost:5173/
-```
+<http://localhost:5173/>
 
-### 環境構築フロー
+### Environment Setup Flow
 
 ```mermaid
 graph TD
-  A[プロジェクトのダウンロード] --> B[.envファイルの作成]
-  B --> C[Dockerイメージの作成]
-  C --> D[プロジェクトの起動]
-  D --> E[アプリケーションへのアクセス]
+  A[Download the Project] --> B[Create the .env File]
+  B --> C[Build Docker Images]
+  C --> D[Start the Project]
+  D --> E[Access the Application]
 ```
 
-## 注意事項
-- `.env` ファイル内の `your-django-secret-key` と `your-openai-api-key` は必ず自分の環境に合わせて設定してください。
-- DockerおよびMakeがインストールされていることを確認してください。
-- 必要に応じて `docker-compose` の設定を調整してください。
+## Notes
+- Ensure you configure `your-django-secret-key` and `your-openai-api-key` in the `.env` file according to your environment.
+- Verify that Docker and Make are installed on your system.
+- Adjust the `docker-compose` settings as needed.
+- Please note that using OpenAI's `gpt-4o-mini` requires purchasing API credits.
 
-## 問い合わせ
-プロジェクトに関する質問や問題が発生した場合は、GitHubのIssueを通じてお問い合わせください。
+## Contact
+For questions or issues related to the project, please contact us via GitHub Issues.
