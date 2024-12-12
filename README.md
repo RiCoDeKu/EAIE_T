@@ -15,6 +15,10 @@ First, clone the project from GitHub.
 git clone https://github.com/RiCoDeKu/EAIE_T.git
 cd EAIE_T
 ```
+:::note warn
+note
+If you have already downloaded this project locally, you do not need to follow these instructions.
+:::
 
 ### 2. Create a .env File
 
